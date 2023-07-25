@@ -1,50 +1,58 @@
-// Copyright 2015 Nevio Vesic
-// Please check out LICENSE file for more information about what you CAN and what you CANNOT do!
-// Basically in short this is a free software for you to do whatever you want to do BUT copyright must be included!
-// I didn't write all of this code so you could say it's yours.
-// MIT License
-
 package goesl
 
 import (
 	"os"
 
-	"github.com/op/go-logging"
+	nested "github.com/antonfisher/nested-logrus-formatter"
+	"github.com/sirupsen/logrus"
 )
 
-var (
-	log = logging.MustGetLogger("goesl")
-
-	// Example format string. Everything except the message has a custom color
-	// which is dependent on the log level. Many fields have a custom output
-	// formatting too, eg. the time returns the hour down to the milli second.
-	format = logging.MustStringFormatter(
-		"%{color}%{time:15:04:05.000} %{shortfunc} ▶ %{level:.8s}%{color:reset} %{message}",
-	)
-)
-
-func Debug(message string, args ...interface{}) {
-	log.Debugf(message, args...)
-}
-
-func Error(message string, args ...interface{}) {
-	log.Errorf(message, args...)
-}
-
-func Notice(message string, args ...interface{}) {
-	log.Noticef(message, args...)
-}
-
-func Info(message string, args ...interface{}) {
-	log.Infof(message, args...)
-}
-
-func Warning(message string, args ...interface{}) {
-	log.Warningf(message, args...)
-}
+var log logrus.FieldLogger
 
 func init() {
-	backend := logging.NewLogBackend(os.Stderr, "", 0)
-	formatter := logging.NewBackendFormatter(backend, format)
-	logging.SetBackend(formatter)
+	lvl, err := logrus.ParseLevel(os.Getenv("GOESL_LOGLEVEL"))
+	if err != nil {
+		logrus.SetLevel(logrus.ErrorLevel)
+	}
+	logrus.SetLevel(lvl)
+	logrus.SetFormatter(&nested.Formatter{
+		FieldsOrder:   []string{"name"},
+		HideKeys:      true,
+		TrimMessages:  true,
+		ShowFullLevel: true,
+	})
+	logrus.SetOutput(os.Stdout)
+	log = logrus.WithField("name", "GOESL")
+}
+
+func Info(msg ...any) {
+	log.Info(msg...)
+}
+
+func Infof(format string, msg ...any) {
+	log.Infof(format, msg...)
+}
+
+func Debug(msg ...any) {
+	log.Debug(msg...)
+}
+
+func Debugf(format string, msg ...any) {
+	log.Debugf(format, msg...)
+}
+
+func Warn(msg ...any) {
+	log.Warn(msg...)
+}
+
+func Warnf(format string, msg ...any) {
+	log.Warnf(format, msg...)
+}
+
+func Error(msg ...any) {
+	log.Error(msg...)
+}
+
+func Errorf(format string, msg ...any) {
+	log.Errorf(format, msg...)
 }
