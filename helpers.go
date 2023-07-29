@@ -3,6 +3,7 @@
 // Basically in short this is a free software for you to do whatever you want to do BUT copyright must be included!
 // I didn't write all of this code so you could say it's yours.
 // MIT License
+// Copyright 2023 Manish
 
 package goesl
 
@@ -26,8 +27,17 @@ func (sc *SocketConnection) ExecuteHangup(uuid string, args string, sync bool) (
 }
 
 // BgApi - Helper designed to attach api in front of the command so that you do not need to write it
-func (sc *SocketConnection) Api(command string) error {
-	return sc.Send("api " + command)
+func (sc *SocketConnection) Api(command string) (*Message, error) {
+	err := sc.Send("api " + command)
+	if err != nil {
+		return nil, err
+	}
+	select {
+	case err := <-sc.err:
+		return nil, err
+	case m := <-sc.m:
+		return m, nil
+	}
 }
 
 // BgApi - Helper designed to attach bgapi in front of the command so that you do not need to write it
