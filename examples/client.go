@@ -9,14 +9,14 @@ package examples
 import (
 	"flag"
 	"fmt"
-	. "github.com/0x19/goesl"
 	"runtime"
 	"strings"
+
+	. "github.com/itzmanish/goesl"
 )
 
 var (
-	fshost   = flag.String("fshost", "localhost", "Freeswitch hostname. Default: localhost")
-	fsport   = flag.Uint("fsport", 8021, "Freeswitch port. Default: 8021")
+	fsaddr   = flag.String("fshost", "localhost:8021", "Freeswitch address. Default: localhost:8021")
 	password = flag.String("pass", "ClueCon", "Freeswitch password. Default: ClueCon")
 	timeout  = flag.Int("timeout", 10, "Freeswitch conneciton timeout in seconds. Default: 10")
 )
@@ -27,7 +27,7 @@ func main() {
 	// Boost it as much as it can go ...
 	runtime.GOMAXPROCS(runtime.NumCPU())
 
-	client, err := NewClient(*fshost, *fsport, *password, *timeout)
+	client, err := NewClient(*fsaddr, *password, *timeout)
 
 	if err != nil {
 		Error("Error while creating new client: %s", err)

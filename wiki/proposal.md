@@ -1,34 +1,30 @@
-Go ESL
-====
+# Go ESL
 
 ###Introduction
 
-[GoESL](https://github.com/0x19/goesl) is a very simple and straight forward [Go](http://golang.org/) package designed to interact with FreeSWITCH [ESL](https://freeswitch.org/confluence/display/FREESWITCH/Event+Socket+Library). GoESL supports both client and server. Server is used to bind and listen for incoming FreeSWITCH messages where client is used for sending commands. GoESL package contains few helpers which can be found in helpers.go so you can easily answer, hangup or send api events.
-
+[GoESL](https://github.com/itzmanish/goesl) is a very simple and straight forward [Go](http://golang.org/) package designed to interact with FreeSWITCH [ESL](https://freeswitch.org/confluence/display/FREESWITCH/Event+Socket+Library). GoESL supports both client and server. Server is used to bind and listen for incoming FreeSWITCH messages where client is used for sending commands. GoESL package contains few helpers which can be found in helpers.go so you can easily answer, hangup or send api events.
 
 ###Installation
 
-[GoESL](https://github.com/0x19/goesl) is a package as-is. Standard go get will get you going :) Make sure to have go properly setup based on your operating system.
+[GoESL](https://github.com/itzmanish/goesl) is a package as-is. Standard go get will get you going :) Make sure to have go properly setup based on your operating system.
 
 If you're unsure how to do it [Go Getting Started](http://golang.org/doc/install) will help you out.
 
 ```go
-go get github.com/0x19/goesl
+go get github.com/itzmanish/goesl
 ```
-
 
 ###How To / Examples
 
-Following code is the only thing you need to do in order to import GoESL 
+Following code is the only thing you need to do in order to import GoESL
 
 ```go
 import (
-	. "github.com/0x19/goesl"
+	. "github.com/itzmanish/goesl"
 )
 ```
 
-All available examples can be found at [GoESL Examples](https://github.com/0x19/goesl/tree/master/examples)
-
+All available examples can be found at [GoESL Examples](https://github.com/itzmanish/goesl/tree/master/examples)
 
 ####Client Example
 
@@ -40,14 +36,13 @@ package examples
 import (
 	"flag"
 	"fmt"
-	. "github.com/0x19/goesl"
+	. "github.com/itzmanish/goesl"
 	"runtime"
 	"strings"
 )
 
 var (
-	fshost   = flag.String("fshost", "localhost", "Freeswitch hostname. Default: localhost")
-	fsport   = flag.Uint("fsport", 8021, "Freeswitch port. Default: 8021")
+	fsaddr   = flag.String("fshost", "localhost:8021", "Freeswitch address. Default: localhost:8021")
 	password = flag.String("pass", "ClueCon", "Freeswitch password. Default: ClueCon")
 	timeout  = flag.Int("timeout", 10, "Freeswitch conneciton timeout in seconds. Default: 10")
 )
@@ -57,7 +52,7 @@ func main() {
 	// Boost it as much as it can go ...
 	runtime.GOMAXPROCS(runtime.NumCPU())
 
-	client, err := NewClient(*fshost, *fsport, *password, *timeout)
+	client, err := NewClient(*fsaddr, *password, *timeout)
 
 	if err != nil {
 		Error("Error while creating new client: %s", err)
@@ -106,7 +101,7 @@ Following example will start server and listen for incoming messages. Once recei
 package examples
 
 import (
-	. "github.com/0x19/goesl"
+	. "github.com/itzmanish/goesl"
 	"runtime"
 	"strings"
 )
@@ -217,13 +212,3 @@ You can run this code by saving it as tts_server.go and than running
 ```bash
 go build tts_server.go && ./tts_server
 ```
-
-
-
-
-
-
-
-
-
-

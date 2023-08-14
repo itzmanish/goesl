@@ -10,8 +10,6 @@ import (
 	"bufio"
 	"fmt"
 	"io"
-	"net"
-	"strconv"
 	"time"
 )
 
@@ -87,10 +85,10 @@ func (c *Client) Authenticate() error {
 
 // NewClient - Will initiate new client that will establish connection and attempt to authenticate
 // against connected freeswitch server
-func NewClient(host string, port uint, passwd string, timeout int) (*Client, error) {
+func NewClient(addr, passwd string, timeout int) (*Client, error) {
 	client := Client{
 		Proto:   "tcp", // Let me know if you ever need this open up lol
-		Addr:    net.JoinHostPort(host, strconv.Itoa(int(port))),
+		Addr:    addr,
 		Passwd:  passwd,
 		Timeout: timeout,
 	}

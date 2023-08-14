@@ -76,6 +76,9 @@ func (s *OutboundServer) Start() error {
 // Stop - Will close server connection once SIGTERM/Interrupt is received
 func (s *OutboundServer) Stop() {
 	Warn("Stopping Outbound Server ...")
+	if s.Listener == nil {
+		return
+	}
 	s.Close()
 }
 
