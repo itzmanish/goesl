@@ -23,7 +23,7 @@ type SocketConnection struct {
 	net.Conn
 	err chan error
 	m   chan *Message
-	mtx sync.Mutex
+	mtx *sync.Mutex
 }
 
 // Dial - Will establish timedout dial against specified address. In this case, it will be freeswitch server
@@ -182,7 +182,7 @@ func (c *SocketConnection) OriginatorAddr() net.Addr {
 }
 
 // ReadMessage - Will read message from channels and return them back accordingy.
-// If error is received, error will be returned. If not, message will be returned back!
+//  If error is received, error will be returned. If not, message will be returned back!
 func (c *SocketConnection) ReadMessage() (*Message, error) {
 	Debug("Waiting for connection message to be received ...")
 
