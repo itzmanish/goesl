@@ -23,7 +23,7 @@ type SocketConnection struct {
 	net.Conn
 	err chan error
 	m   chan *Message
-	mtx *sync.Mutex
+	mtx sync.Mutex
 }
 
 // Dial - Will establish timedout dial against specified address. In this case, it will be freeswitch server

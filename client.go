@@ -16,7 +16,7 @@ import (
 // Client - In case you need to do inbound dialing against freeswitch server in order to originate call or see
 // sofia statuses or whatever else you came up with
 type Client struct {
-	SocketConnection
+	*SocketConnection
 
 	Proto   string `json:"freeswitch_protocol"`
 	Addr    string `json:"freeswitch_addr"`
@@ -31,7 +31,7 @@ func (c *Client) EstablishConnection() error {
 		return err
 	}
 
-	c.SocketConnection = SocketConnection{
+	c.SocketConnection = &SocketConnection{
 		Conn: conn,
 		err:  make(chan error),
 		m:    make(chan *Message),
